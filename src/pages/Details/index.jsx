@@ -1,11 +1,10 @@
-import './styles.css';
-import { Fragment } from "react";
+import { Container } from './styles';
 
 export function Details() {
   return(
-    <Fragment>
+    <Container>
       <h1>Hello World!</h1>
       <span>Henrico Angoelra</span>
-    </Fragment>
+    </Container>
   )
 }
