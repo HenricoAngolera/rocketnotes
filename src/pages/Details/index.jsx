@@ -1,3 +1,4 @@
+import './styles.css';
 import { Fragment } from "react";
 
 export function Details() {
