@@ -4,7 +4,7 @@ export function Details() {
   return(
     <Container>
       <h1>Hello World!</h1>
-      <span>Henrico Angoelra</span>
+      <span>Henrico Angolera</span>
     </Container>
   )
 }
