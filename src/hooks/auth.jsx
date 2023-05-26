@@ -1,8 +1,8 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from 'react'
 
-import { api } from "../services/api";
+import { api } from '../services/api'
 
-export const AuthContext = createContext({});
+export const AuthContext = createContext({})
 
 // eslint-disable-next-line react/prop-types
 function AuthProvider({ children }) {
@@ -10,11 +10,11 @@ function AuthProvider({ children }) {
 
   async function signIn({ email, password }) {
     try {
-      const response = await api.post("/sessions", { email, password })
+      const response = await api.post('/sessions', { email, password })
       const { user, token } = response.data
 
-      localStorage.setItem("@rocketnotes:user", JSON.stringify(user))
-      localStorage.setItem("@rocketnotes:token", token)
+      localStorage.setItem('@rocketnotes:user', JSON.stringify(user))
+      localStorage.setItem('@rocketnotes:token', token)
 
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
@@ -23,7 +23,7 @@ function AuthProvider({ children }) {
       if (error.response) {
         alert(error.response.data.message)
       } else {
-        alert("It was not possible do enter.")
+        alert('It was not possible to enter.')
         console.error(error)
       }
     }
@@ -36,6 +36,23 @@ function AuthProvider({ children }) {
     setData({})
   }
 
+  async function updateProfile({ user }) {
+    try {
+      await api.put('/users', user)
+      localStorage.setItem('@rocketnotes:user', JSON.stringify(user))
+
+      setData({ user, token: data.token })
+      alert('Updated Profile!')
+    } catch (error) {
+      if (error.response) {
+        alert(error.response.data.message)
+      } else {
+        alert('It was not possible to update profile.')
+        console.error(error)
+      }
+    }
+  }
+
   useEffect(() => {
     const token = localStorage.getItem('@rocketnotes:token')
     const user = localStorage.getItem('@rocketnotes:user')
@@ -44,18 +61,21 @@ function AuthProvider({ children }) {
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
       setData({
-        token, 
+        token,
         user: JSON.parse(user)
       })
     }
   }, [])
 
   return (
-    <AuthContext.Provider value={{ 
-      signIn,
-      signOut,
-      user: data.user,
-    }}>
+    <AuthContext.Provider
+      value={{
+        signIn,
+        signOut,
+        updateProfile,
+        user: data.user
+      }}
+    >
       {children}
     </AuthContext.Provider>
   )
@@ -68,4 +88,3 @@ function useAuth() {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export { AuthProvider, useAuth }
-
