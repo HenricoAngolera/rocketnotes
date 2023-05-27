@@ -14,7 +14,7 @@ export const Container = styled.header`
   display: flex;
   justify-content: space-between;
 
-  padding: 0 8px;
+  padding: 0 80px;
 `;
 
 export const Profile = styled(Link)`

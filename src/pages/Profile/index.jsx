@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'
 
 import { useAuth } from '../../hooks/auth'
 
+import { api } from '../../services/api'
+import avatarPlaceholder from '../../assets/avatar_placeholder.svg'
 import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
 
@@ -17,6 +19,12 @@ export function Profile() {
   const [newPassword, setNewPassword] = useState()
   const [oldPassword, setOldPassword] = useState()
 
+  const avatarUrl = user.avatar
+    ? `${api.defaults.baseURL}/files/${user.avatar}`
+    : avatarPlaceholder
+  const [avatar, setAvatar] = useState(avatarUrl)
+  const [avatarFile, setAvatarFile] = useState(null)
+
   async function handleUpdate() {
     const user = {
       name,
@@ -25,7 +33,15 @@ export function Profile() {
       old_password: oldPassword
     }
 
-    await updateProfile({ user })
+    await updateProfile({ user, avatarFile })
+  }
+
+  function handleChangeAvatar(event) {
+    const file = event.target.files[0]
+    setAvatarFile(file)
+
+    const imagePreview = URL.createObjectURL(file)
+    setAvatar(imagePreview)
   }
 
   return (
@@ -38,15 +54,12 @@ export function Profile() {
 
       <Form>
         <Avatar>
-          <img
-            src="https://github.com/HenricoAngolera.png"
-            alt="Foto do usuário"
-          />
+          <img src={avatar} alt="Foto do usuário" />
 
           <label htmlFor="avatar">
             <FiCamera />
 
-            <input type="file" id="avatar" />
+            <input type="file" id="avatar" onChange={handleChangeAvatar} />
           </label>
         </Avatar>
         <Input
