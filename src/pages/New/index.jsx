@@ -22,13 +22,17 @@ export function New() {
     setNewLink("")
   }
 
-  function handleRemoveLink(deleted) {
-    setLinks(prevState => prevState.filter(link => link !== deleted))
+  function handleRemoveLink(deletedLink) {
+    setLinks(prevState => prevState.filter(link => link !== deletedLink))
   }
 
   function handleAddTag() {
     setTags(prevState => [...prevState, newTag])
     setNewTag("")
+  }
+
+  function handleRemoveTag(deletedTag) {
+    setTags(prevState => prevState.filter(tag => tag !== deletedTag))
   }
 
   return(
@@ -77,7 +81,7 @@ export function New() {
                   <NoteItem 
                     key={String(index)}
                     value={tag}
-                    onClick={() => {}} 
+                    onClick={() => {handleRemoveTag(tag)}} 
                   />
                 ))
               }
